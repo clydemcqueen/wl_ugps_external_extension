@@ -1,0 +1,10 @@
+{
+    "name": "WL UGPS External",
+    "description": "Listen for NMEA GGA and HDT messages and send the position information to the WL UGPS G2 API",
+    "icon": "mdi-compass",
+    "company": "Discovery Bay Robotics",
+    "version": "1.0.0",
+    "webpage": "https://github.com/clydemcqueen/wl_ugps_external_extension",
+    "api": "",
+    "newpage": false
+ }
