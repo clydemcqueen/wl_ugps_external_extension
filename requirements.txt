@@ -1,11 +1,9 @@
-# Copied from setup.py
+# Should match setup.py
+# Do not include setuptools
 
 aiofiles==0.8.0
-fastapi==0.63.0
-loguru==0.5.3
-pydantic==1.10.12
+fastapi==0.109.1
+loguru==0.6.0
 pynmea2==1.19.0
 requests==2.31.0
-setuptools==65.5.1
-starlette==0.13.6
 uvicorn==0.13.4

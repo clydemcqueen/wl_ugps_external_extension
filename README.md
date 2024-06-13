@@ -27,6 +27,11 @@ Click on it to see a very simple UI.
 
 ## Releases
 
+### v1.0.2
+
+* Update requirements.txt, setup.py
+* No user-visible changes
+
 ### v1.0.1
 
 * Simplified README
@@ -34,3 +39,7 @@ Click on it to see a very simple UI.
 ### v1.0.0
 
 * Initial release
+
+## Developer notes
+
+See https://github.com/clydemcqueen/wl_ugps_external for testing tools.
