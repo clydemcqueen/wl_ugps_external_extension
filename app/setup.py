@@ -11,7 +11,7 @@ if not os.environ.get("PYTHONHTTPSVERIFY", "") and getattr(ssl, "_create_unverif
 
 setup(
     name="wl_ugps_external_extension",
-    version="1.0.2",
+    version="1.0.3",
     description="WL UGPS External Extension",
     license="MIT",
     install_requires=[

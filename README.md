@@ -27,6 +27,11 @@ Click on it to see a very simple UI.
 
 ## Releases
 
+### v1.0.3
+
+* Shorten company name
+* No user-visible changes
+
 ### v1.0.2
 
 * Update requirements.txt, setup.py
@@ -34,7 +39,7 @@ Click on it to see a very simple UI.
 
 ### v1.0.1
 
-* Simplified README
+* Simplify README
 
 ### v1.0.0
 
