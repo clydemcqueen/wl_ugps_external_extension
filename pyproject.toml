@@ -1,0 +1,22 @@
+# Use Poetry to manage deps in PyCharm
+[tool.poetry]
+package-mode = false
+
+[project]
+name = "wl_ugps_external_extension"
+version = "1.0.3"
+description = "WL UGPS External Extension"
+license = {text = "MIT" }
+dependencies = [
+    "aiofiles==0.8.0",
+    "fastapi==0.109.1",
+    "loguru==0.6.0",
+    "pynmea2==1.19.0",
+    "requests==2.31.0",
+    "uvicorn==0.13.4"
+]
+
+# This is the default build backend, but let's make it explicit
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

@@ -1,7 +1,10 @@
 FROM python:3.9-slim-bullseye
 
 COPY app /app
-RUN python /app/setup.py install
+
+# Use pip as the build frontend
+COPY pyproject.toml /app
+RUN python -m pip install /app
 
 # For web app:
 EXPOSE 8080/tcp

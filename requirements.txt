@@ -1,9 +1,0 @@
-# Should match setup.py
-# Do not include setuptools
-
-aiofiles==0.8.0
-fastapi==0.109.1
-loguru==0.6.0
-pynmea2==1.19.0
-requests==2.31.0
-uvicorn==0.13.4
