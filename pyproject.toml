@@ -2,17 +2,19 @@
 [tool.poetry]
 package-mode = false
 
+# This section is used by pip (see Dockerfile)
 [project]
 name = "wl_ugps_external_extension"
 version = "1.0.3"
 description = "WL UGPS External Extension"
-license = {text = "MIT" }
+license = {text = "MIT"}
+requires-python = ">= 3.9"
 dependencies = [
     "aiofiles==0.8.0",
     "fastapi==0.109.1",
     "loguru==0.6.0",
     "pynmea2==1.19.0",
-    "requests==2.31.0",
+    "requests==2.32.3",
     "uvicorn==0.13.4"
 ]
 
@@ -20,3 +22,13 @@ dependencies = [
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+# Poetry doesn't support PEP 621 yet, so list deps (including Python version) a second time
+[tool.poetry.dependencies]
+python = "^3.9"
+aiofiles = "0.8.0"
+fastapi = "0.109.1"
+loguru = "0.6.0"
+pynmea2 = "1.19.0"
+requests = "2.32.3"
+uvicorn = "0.13.4"
