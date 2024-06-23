@@ -1,0 +1,5 @@
+fastapi~=0.109.1
+loguru~=0.6.0
+pynmea2~=1.19.0
+requests~=2.32.3
+uvicorn~=0.13.4
