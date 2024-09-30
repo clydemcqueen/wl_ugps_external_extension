@@ -1,8 +1,7 @@
 import threading
 import time
 
-import pynmea2
-from loguru import logger
+import nmea_sentences
 
 
 class TopsidePosition:
@@ -27,37 +26,19 @@ class TopsidePosition:
         self.heading = 0
         self.sog = 0
 
-    def recv_packet(self, packet):
-        """
-        Packet format is:
-        <sentence><cr><lf><sentence><cr><lf><sentence><cr><lf>...
-        """
-        sentence_strs = packet.decode().split('\r\n')
-        for sentence_str in sentence_strs:
-            if sentence_str == '':
-                continue
-
-            sentence = pynmea2.parse(sentence_str)
-            logger.info(sentence)
-
-            if sentence.sentence_type == 'GGA':
-                self.recv_gga(sentence)
-            elif sentence.sentence_type == 'HDT':
-                self.recv_hdt(sentence)
-
-    def recv_gga(self, sentence):
+    def put_gga(self, gga: nmea_sentences.GGA):
         with self.lock:
             self.location_time = time.time()
-            self.fix_quality = int(sentence.data[5])
-            self.hdop = float(sentence.data[7])
-            self.latitude = sentence.latitude
-            self.longitude = sentence.longitude
-            self.numsats = int(sentence.data[6])
+            self.fix_quality = gga.fix_quality
+            self.hdop = gga.hdop
+            self.latitude = gga.latitude
+            self.longitude = gga.longitude
+            self.numsats = gga.numsats
 
-    def recv_hdt(self, sentence):
+    def put_hdt(self, hdt: nmea_sentences.HDT):
         with self.lock:
             self.heading_time = time.time()
-            self.heading = float(sentence.data[0])
+            self.heading = hdt.heading
 
     def location_valid(self):
         return self.location_time is not None and self.location_time + self.TIMEOUT_S > time.time()

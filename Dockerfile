@@ -24,6 +24,9 @@ LABEL permissions='\
     "6200:6200/udp": {}\
   },\
   "HostConfig": {\
+    "Binds": [\
+      "/usr/blueos/extensions/wl_ugps_external:/data:rw"\
+    ],\
     "PortBindings": {\
       "6200/udp": [\
         {\
@@ -39,7 +42,9 @@ LABEL permissions='\
   },\
   "Env": [\
     "UGPS_HOST=http://192.168.2.94",\
-    "SEND_RATE=2.0"\
+    "SEND_RATE=2.0,"\
+    "POLL_RATE=0.0"\
+    "LOG_NMEA="\
   ]\
 }'
 LABEL authors='[\
@@ -66,4 +71,4 @@ LABEL links='{\
 }'
 LABEL requirements="core >= 1.1"
 
-ENTRYPOINT cd /app && python main.py --ugps_host $UGPS_HOST --send_rate $SEND_RATE
+ENTRYPOINT cd /app && python main.py --ugps_host $UGPS_HOST --send_rate $SEND_RATE --poll_rate $POLL_RATE $LOG_NMEA
