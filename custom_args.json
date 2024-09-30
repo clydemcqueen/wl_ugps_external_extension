@@ -1,0 +1,8 @@
+{
+  "Env": [
+    "UGPS_HOST=http://192.168.2.94",
+    "SEND_RATE=2.0",
+    "POLL_RATE=5.0",
+    "LOG_NMEA=--log_nmea"
+  ]
+}

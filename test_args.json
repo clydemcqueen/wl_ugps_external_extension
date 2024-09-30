@@ -1,0 +1,29 @@
+{
+  "ExposedPorts": {
+    "8080/tcp": {},
+    "6200:6200/udp": {}
+  },
+  "HostConfig": {
+    "Binds": [
+      "/usr/blueos/extensions/wl_ugps_external:/data:rw"
+    ],
+    "PortBindings": {
+      "6200/udp": [
+        {
+          "HostPort": "6200"
+        }
+      ],
+      "8080/tcp": [
+        {
+          "HostPort": ""
+        }
+      ]
+    }
+  },
+  "Env": [
+    "UGPS_HOST=https://demo.waterlinked.com",
+    "SEND_RATE=1.0",
+    "POLL_RATE=0.0",
+    "LOG_NMEA="
+  ]
+}
