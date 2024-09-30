@@ -49,6 +49,11 @@ Logs can be found in BlueOS:
 
 ## Releases
 
+### v1.1.0-beta1
+
+* Optional: Log GGA, HDT and PASHR messages
+* Optional: Poll the G2 box for additional information (pose, acoustic solution) and log the results
+
 ### v1.0.3
 
 * Shorten company name

@@ -3,7 +3,7 @@
     "description": "Send GNSS compass data to WL UGPS",
     "icon": "mdi-compass",
     "company": "Discovery Bay",
-    "version": "v1.0.3",
+    "version": "v1.1.0-beta1",
     "webpage": "https://github.com/clydemcqueen/wl_ugps_external_extension",
     "api": "",
     "newpage": false
