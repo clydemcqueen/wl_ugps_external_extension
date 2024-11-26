@@ -12,7 +12,7 @@ EXPOSE 8080/tcp
 # For NMEA messages from the GPS/compass:
 EXPOSE 6200/udp
 
-LABEL version="v1.1.0-beta1"
+LABEL version="v1.1.0-beta.1"
 
 # Reference:
 # https://docs.bluerobotics.com/ardusub-zola/software/onboard/BlueOS-1.1/development/extensions/
