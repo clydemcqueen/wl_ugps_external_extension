@@ -42,8 +42,8 @@ LABEL permissions='\
   },\
   "Env": [\
     "UGPS_HOST=http://192.168.2.94",\
-    "SEND_RATE=2.0,"\
-    "POLL_RATE=0.0"\
+    "SEND_RATE=2.0",\
+    "POLL_RATE=0.0",\
     "LOG_NMEA="\
   ]\
 }'
