@@ -26,9 +26,9 @@ class ListenThread(threading.Thread):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
         if log_nmea:
-            self.gga_logger = DataLogger(config.path_prefix + 'GGA.csv', nmea_sentences.GGA.fieldnames())
-            self.hdt_logger = DataLogger(config.path_prefix + 'HDT.csv', nmea_sentences.HDT.fieldnames())
-            self.pashr_logger = DataLogger(config.path_prefix + 'PASHR.csv', nmea_sentences.PASHR.fieldnames())
+            self.gga_logger = DataLogger(config.path_prefix + 'nmea_GGA.csv', nmea_sentences.GGA.fieldnames())
+            self.hdt_logger = DataLogger(config.path_prefix + 'nmea_HDT.csv', nmea_sentences.HDT.fieldnames())
+            self.pashr_logger = DataLogger(config.path_prefix + 'nmea_PASHR.csv', nmea_sentences.PASHR.fieldnames())
         else:
             self.gga_logger = None
             self.hdt_logger = None
