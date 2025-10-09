@@ -4,3 +4,6 @@ dist/
 wl_ugps_external_extension.egg-info/
 app/__pycache__/
 poetry.lock
+app.log
+*.log
+jules-scratch/

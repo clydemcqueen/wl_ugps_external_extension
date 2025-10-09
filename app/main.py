@@ -71,6 +71,7 @@ def run(args):
             'heading': topside_position.heading,
             'ugps_host': args.ugps_host,
             'send_rate': args.send_rate,
+            'logging_status': logging,
         }
 
     # Create a FastAPI sub-application: serve static files in /app/static

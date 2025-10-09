@@ -2,6 +2,7 @@ let el_ext = document.getElementById("extension_status");
 let el_gga = document.getElementById("gga_status");
 let el_hdt = document.getElementById("hdt_status");
 let el_inject = document.getElementById("inject_status");
+let el_logging = document.getElementById("logging_status");
 
 function showStatus(el, status, good_text, bad_text) {
     if (status) {
@@ -20,7 +21,7 @@ async function getStatus() {
             el_ext.textContent = "Listening on 192.168.2.2:6200";
             el_ext.className = "status_good";
 
-            const {gga_status, hdt_status, inject_status, latitude, longitude, heading, ugps_host, send_rate} = await response.json();
+            const {gga_status, hdt_status, inject_status, logging_status, latitude, longitude, heading, ugps_host, send_rate} = await response.json();
 
             showStatus(el_gga, gga_status,
                 " Receiving GGA: " + latitude.toFixed(4).toString() + ", " + longitude.toFixed(4).toString(),
@@ -33,6 +34,14 @@ async function getStatus() {
             showStatus(el_inject, inject_status,
                 "Sending to " + ugps_host + " at " + send_rate + "Hz",
                 "Not sending to " + ugps_host + " at " + send_rate + "Hz");
+
+            if (logging_status) {
+                el_logging.textContent = "Logging G2 pose, acoustics and NMEA messages";
+                el_logging.className = "status_good";
+            } else {
+                el_logging.textContent = "Logging disabled";
+                el_logging.className = "status_unknown";
+            }
 
             return;
         }
@@ -51,6 +60,9 @@ async function getStatus() {
 
     el_inject.textContent = "Injection status unknown";
     el_inject.className = "status_unknown";
+
+    el_logging.textContent = "Logging status unknown";
+    el_logging.className = "status_unknown";
 }
 
 setInterval(getStatus, 500);
