@@ -44,9 +44,14 @@ class LoggingConfig:
         now = datetime.datetime.now()
         date_str = now.strftime('%Y-%m-%d')
         time_str = now.strftime('%H-%M-%S')
-        dir_str = '/tmp/wl_ugps_test/' + date_str if local_test else '/data/logs/' + date_str
+        # On a real system, the /data directory will exist.
+        # For local testing, it may not, so use /tmp instead.
+        if local_test or not pathlib.Path('/data').exists():
+            dir_str = f'/tmp/wl_ugps_test/{date_str}'
+        else:
+            dir_str = f'/data/logs/{date_str}'
         pathlib.Path(dir_str).mkdir(parents=True, exist_ok=True)
-        self.path_prefix = dir_str + '/' + date_str + '_' + time_str + '_'
+        self.path_prefix = f'{dir_str}/{date_str}_{time_str}_'
 
 
 class DataLogger:
