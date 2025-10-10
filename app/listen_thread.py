@@ -29,6 +29,7 @@ class ListenThread(threading.Thread):
             self.gga_logger = DataLogger(config.path_prefix + 'nmea_GGA.csv', nmea_sentences.GGA.fieldnames())
             self.hdt_logger = DataLogger(config.path_prefix + 'nmea_HDT.csv', nmea_sentences.HDT.fieldnames())
             self.pashr_logger = DataLogger(config.path_prefix + 'nmea_PASHR.csv', nmea_sentences.PASHR.fieldnames())
+            self.messages_logged = False
         else:
             self.gga_logger = None
             self.hdt_logger = None
@@ -90,6 +91,7 @@ class ListenThread(threading.Thread):
         self.topside_position.put_gga(gga)
         if self.gga_logger is not None:
             self.gga_logger.log(gga.as_dict())
+            self.messages_logged = True
 
     # Hmmm... we could get the heading from PASHR, and stop listening to HDT
     def recv_hdt(self, sentence):
@@ -97,6 +99,7 @@ class ListenThread(threading.Thread):
         self.topside_position.put_hdt(hdt)
         if self.hdt_logger is not None:
             self.hdt_logger.log(hdt.as_dict())
+            self.messages_logged = True
 
     def recv_pashr(self, sentence):
         if self.pashr_logger is not None:
@@ -106,6 +109,14 @@ class ListenThread(threading.Thread):
     def stop(self):
         # Close socket, this will raise an exception in the run loop
         self.sock.close()
+
+    def logging_status(self) -> str:
+        if self.gga_logger is None:
+            return 'disabled'
+        elif self.messages_logged:
+            return 'logging'
+        else:
+            return 'waiting'
 
 
 # For testing
