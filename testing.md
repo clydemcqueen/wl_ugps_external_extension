@@ -42,8 +42,9 @@ docker run --rm -it \
   -p 6200:6200/udp \
   -e UGPS_HOST=https://demo.waterlinked.com \
   -e SEND_RATE=2.0 \
-  -e POLL_RATE=0.0 \
-  -e LOG_NMEA="" \
+  -e POLL_RATE=2.0 \
+  -e LOG_NMEA="--log_nmea" \
+  --name wl_ugps_test \
   YOURDOCKERHUB/wl_ugps_external_extension:local
 ~~~
 
@@ -102,8 +103,8 @@ Step 4: Install on BlueOS
   "Env": [
     "UGPS_HOST=https://demo.waterlinked.com",
     "SEND_RATE=2.0",
-    "POLL_RATE=0.0",
-    "LOG_NMEA="
+    "POLL_RATE=2.0",
+    "LOG_NMEA=--log_nmea"
   ]
 }
 ~~~
