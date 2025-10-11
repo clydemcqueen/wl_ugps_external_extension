@@ -2,10 +2,21 @@ import csv
 import datetime
 import pathlib
 import time
+from enum import Enum
 from typing import Optional
 
 import requests
 from loguru import logger
+
+
+class PollStatus(Enum):
+    """
+    G2 polling status
+    """
+    DISABLED = 'DISABLED'
+    WAITING = 'WAITING'
+    FAILED = 'FAILED'
+    SUCCESS = 'SUCCESS'
 
 
 def get_data(url) -> Optional[dict]:
@@ -81,14 +92,24 @@ class PollingLogger(DataLogger):
     Poll an endpoint and log the results.
     """
 
-    def __init__(self, endpoint: str, filename: str, fieldnames: list[str]):
+    def __init__(self, name: str, endpoint: str, filename: str, fieldnames: list[str]):
         super().__init__(filename, fieldnames)
+        self.name = name
         self.endpoint = endpoint
+        self.status = PollStatus.WAITING
+        self.data = {}
 
     def poll(self):
         row = get_data(self.endpoint)
         if row is not None:
+            self.status = PollStatus.SUCCESS
+            self.data = row
             self.log(row)
+        else:
+            self.status = PollStatus.FAILED
+
+    def get_status(self) -> dict:
+        return {'name': self.name, 'status': self.status, 'data': self.data}
 
 
 class AcousticLogger(PollingLogger):
@@ -96,8 +117,8 @@ class AcousticLogger(PollingLogger):
     Special case for /api/v1/position/acoustic/filtered.
     """
 
-    def __init__(self, endpoint: str, filename: str):
-        super().__init__(endpoint, filename, [
+    def __init__(self, name: str, endpoint: str, filename: str):
+        super().__init__(name, endpoint, filename, [
             'position_valid', 'x', 'y', 'z', 'std',
             'distance_r0', 'distance_r1', 'distance_r2', 'distance_r3',
             'nsd_r0', 'nsd_r1', 'nsd_r2', 'nsd_r3',
@@ -107,12 +128,17 @@ class AcousticLogger(PollingLogger):
     def poll(self):
         row = get_data(self.endpoint)
         if row is None:
+            self.status = PollStatus.FAILED
             return
 
-        # Flatten lists
-        flatten_list_value(row, 'receiver_distance', 'distance_r{i}')
-        flatten_list_value(row, 'receiver_nsd', 'nsd_r{i}')
-        flatten_list_value(row, 'receiver_rssi', 'rssi_r{i}')
-        flatten_list_value(row, 'receiver_valid', 'valid_r{i}')
+        self.status = PollStatus.SUCCESS
+        self.data = row
 
-        self.log(row)
+        # Flatten lists for logging
+        log_row = row.copy()
+        flatten_list_value(log_row, 'receiver_distance', 'distance_r{i}')
+        flatten_list_value(log_row, 'receiver_nsd', 'nsd_r{i}')
+        flatten_list_value(log_row, 'receiver_rssi', 'rssi_r{i}')
+        flatten_list_value(log_row, 'receiver_valid', 'valid_r{i}')
+
+        self.log(log_row)

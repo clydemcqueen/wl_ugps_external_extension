@@ -53,11 +53,8 @@ def run(args):
     send_thread.start()
 
     # Start polling the G2 box for acoustic and other information
-    if args.poll_rate > 0.0:
-        polling_thread = PollingThread(args.ugps_host, args.poll_rate, config)
-        polling_thread.start()
-    else:
-        polling_thread = None
+    polling_thread = PollingThread(args.ugps_host, args.poll_rate, config)
+    polling_thread.start()
 
     # Add a FastAPI route: /status returns a dictionary
     @app.get("/status", status_code=status.HTTP_200_OK)
@@ -72,6 +69,7 @@ def run(args):
             'ugps_host': args.ugps_host,
             'send_rate': args.send_rate,
             'nmea_logging_status': listen_thread.logging_status(),
+            'g2_logging_status': polling_thread.get_status(),
         }
 
     # Create a FastAPI sub-application: serve static files in /app/static
