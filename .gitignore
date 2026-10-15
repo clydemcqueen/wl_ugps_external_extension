@@ -4,3 +4,4 @@ dist/
 wl_ugps_external_extension.egg-info/
 app/__pycache__/
 poetry.lock
+.venv/
