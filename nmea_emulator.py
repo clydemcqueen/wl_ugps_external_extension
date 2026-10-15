@@ -26,6 +26,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--ip', type=str, default='127.0.0.1', help='target IP address')
     parser.add_argument('--port', type=int, default='10110', help='target port')
+    parser.add_argument('--flaky', type=int, default=0, help='every Nth set of sentences has bad / missing data')
     args = parser.parse_args()
 
     print(f'Sending packets to {args.ip}:{args.port}')
@@ -41,7 +42,6 @@ def main():
         sim.gps.lon = -122.34390446166833
         sim.gps.altitude = 0
         sim.gps.kph = 1.0
-        sim.gps.orientation = 90.0
         sim.gps.mag_heading = 105.33
         sim.gps.date_time = datetime.now(TZ_LOCAL)  # PC current time, local time zone
         sim.gps.hdop = 3.1
@@ -61,8 +61,14 @@ def main():
 
     try:
 
+        count = 0
         while True:
+            count += 1
             gga_str, hdm_str, hdt_str = list(sim.get_output(1))
+
+            if args.flaky and count % args.flaky == 0:
+                hdt_str = '$GPHDT,,T*1B'  # Empty heading
+
             pashr1_str = '$PASHR,163029.000,158.09,T,-0.30,+0.31,+0.01,0.029,0.029,0.059,1,1*3B'
             pashr2_str = '$PASHR,130533.620,0.311,T,-80.467,-1.395,0.25,0.066,0.067,0.215,2,3*12'
             print(f'Sending "{gga_str}", "{hdm_str}", "{hdt_str}", "{pashr1_str}", "{pashr2_str}"')
