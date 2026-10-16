@@ -54,40 +54,60 @@ class ListenThread(threading.Thread):
             except socket.error:
                 break
 
+            except Exception as e:
+                logger.error(f'Unexpected error in listen thread: {e}')
+
     def recv_packet(self, packet):
         """
         Packet format is:
         <sentence><cr><lf><sentence><cr><lf><sentence><cr><lf>...
         """
-        sentence_strs = packet.decode().split('\r\n')
+        try:
+            decoded = packet.decode()
+        except UnicodeDecodeError as e:
+            logger.warning(f'Could not decode NMEA packet: {e}')
+            return
+
+        sentence_strs = decoded.split('\r\n')
         for sentence_str in sentence_strs:
             if sentence_str == '':
                 continue
 
-            sentence = pynmea2.parse(sentence_str)
+            try:
+                sentence = pynmea2.parse(sentence_str)
+            except Exception as e:
+                logger.warning(f'Could not parse NMEA sentence "{sentence_str}": {e}')
+                continue
 
-            if hasattr(sentence, 'sentence_type'):
-                # This is a standard message
-                if sentence.sentence_type not in self.nmea_messages_received:
-                    self.nmea_messages_received.append(sentence.sentence_type)
-                    logger.info(f'Receiving {sentence.sentence_type} messages')
+            try:
+                if hasattr(sentence, 'sentence_type'):
+                    # This is a standard message
+                    if sentence.sentence_type not in self.nmea_messages_received:
+                        self.nmea_messages_received.append(sentence.sentence_type)
+                        logger.info(f'Receiving {sentence.sentence_type} messages')
 
-                if sentence.sentence_type == 'GGA':
-                    self.recv_gga(sentence)
-                elif sentence.sentence_type == 'HDT':
-                    self.recv_hdt(sentence)
+                    if sentence.sentence_type == 'GGA':
+                        self.recv_gga(sentence)
+                    elif sentence.sentence_type == 'HDT':
+                        self.recv_hdt(sentence)
 
-            elif hasattr(sentence, 'manufacturer'):
-                # This is a proprietary message
-                if sentence.manufacturer not in self.nmea_messages_received:
-                    self.nmea_messages_received.append(sentence.manufacturer)
-                    logger.info(f'Receiving {sentence.manufacturer} messages (proprietary)')
+                elif hasattr(sentence, 'manufacturer'):
+                    # This is a proprietary message
+                    if sentence.manufacturer not in self.nmea_messages_received:
+                        self.nmea_messages_received.append(sentence.manufacturer)
+                        logger.info(f'Receiving {sentence.manufacturer} messages (proprietary)')
 
-                if sentence.manufacturer == 'ASH' and sentence.data[0] == 'R':
-                    self.recv_pashr(sentence)
+                    if sentence.manufacturer == 'ASH' and getattr(sentence, 'data', None) and sentence.data[0] == 'R':
+                        self.recv_pashr(sentence)
+            except Exception as e:
+                logger.warning(f'Error processing NMEA sentence "{sentence_str}": {e}')
 
     def recv_gga(self, sentence):
         gga = nmea_sentences.GGA.from_sentence(sentence)
+        if gga is None:
+            logger.warning(f'Bad GGA: {sentence}')
+            return
+
         self.topside_position.put_gga(gga)
         if self.gga_logger is not None:
             self.gga_logger.log(gga.as_dict())
@@ -96,6 +116,10 @@ class ListenThread(threading.Thread):
     # Hmmm... we could get the heading from PASHR, and stop listening to HDT
     def recv_hdt(self, sentence):
         hdt = nmea_sentences.HDT.from_sentence(sentence)
+        if hdt is None:
+            logger.warning(f'Bad HDT: {sentence}')
+            return
+
         self.topside_position.put_hdt(hdt)
         if self.hdt_logger is not None:
             self.hdt_logger.log(hdt.as_dict())
@@ -104,6 +128,10 @@ class ListenThread(threading.Thread):
     def recv_pashr(self, sentence):
         if self.pashr_logger is not None:
             pashr = nmea_sentences.PASHR.from_sentence(sentence)
+            if pashr is None:
+                logger.warning(f'Bad PASHR: {sentence}')
+                return
+
             self.pashr_logger.log(pashr.as_dict())
 
     def stop(self):

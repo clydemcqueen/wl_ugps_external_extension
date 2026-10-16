@@ -48,7 +48,7 @@ async function getStatus() {
                 "Sending to " + ugps_host + " at " + send_rate + "Hz",
                 "Not sending to " + ugps_host + " at " + send_rate + "Hz");
 
-            showNmeaStatus(nmea_logging_status)
+            showNmeaStatus(nmea_logging_status);
 
             return;
         }
