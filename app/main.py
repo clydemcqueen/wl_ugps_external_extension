@@ -7,6 +7,7 @@ The default arguments allow for easy dev testing, see the Dockerfile for product
 """
 
 import argparse
+import os
 from typing import Any
 
 import uvicorn
@@ -112,5 +113,8 @@ def main():
 
 
 if __name__ == "__main__":
-    logger.info(f"Starting wl_ugps_external_extension")
+    version = os.getenv("EXTENSION_VERSION", "dev")
+    git_sha = os.getenv("GIT_SHA")
+    version_str = f"{version} ({git_sha})" if git_sha else version
+    logger.info(f"Starting wl_ugps_external_extension {version_str}")
     main()

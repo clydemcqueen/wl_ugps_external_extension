@@ -36,7 +36,10 @@ python3 app/send_thread.py
 
 Build and run the docker image locally:
 ~~~
-docker build . -t YOURDOCKERHUB/wl_ugps_external_extension:local
+docker build \
+  --build-arg GIT_SHA=$(git rev-parse --short HEAD) \
+  -t YOURDOCKERHUB/wl_ugps_external_extension:local \
+  .
 docker run --rm -it \
   -p 8080:8080 \
   -p 6200:6200/udp \
@@ -68,7 +71,12 @@ docker login
 
 Step 3: Build and upload:
 ~~~
-docker buildx build --platform linux/amd64,linux/arm/v7 . -t YOURDOCKERHUB/wl_ugps_external_extension:latest --output type=registry
+docker buildx build \
+  --platform linux/amd64,linux/arm/v7 \
+  --build-arg GIT_SHA=$(git rev-parse --short HEAD) \
+  -t YOURDOCKERHUB/wl_ugps_external_extension:latest \
+  --output type=registry \
+  .
 ~~~
 
 Step 4: Install on BlueOS
