@@ -34,3 +34,7 @@ The folder structure is dictated by the Dockerfile and BlueOS extension requirem
 * The app/static/register_service file is used by BlueOS to register the extension.
 * The README.md file will be shown in the extension marketplace, so it should be kept short and only contain information relevant to the ROV pilot.
 * The requirements.txt file is used to install the Python dependencies in the docker image.
+
+This extension uses Python 3.9.
+
+See testing and deployment information in [testing.md](testing.md).
