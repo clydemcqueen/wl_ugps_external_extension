@@ -1,4 +1,4 @@
-# WL UGPS External 
+# WL UGPS External
 
 Send NMEA position information (GGA and HDT) to the [Water Linked UGPS](https://waterlinked.com/underwater-gps-g2) API.
 
@@ -23,7 +23,7 @@ Click on it to see a very simple UI.
 * Set `UGPS_HOST` to the IP address of the WL UGPS G2 box. The default is `http://192.168.2.94`.
 * Set `SEND_RATE` to the rate to send position information to the G2 box. The default is 2Hz.
 * Set `POLL_RATE` to the rate to poll the G2 box for acoustic and pose information. The default is 0 (no polling).
-* If `LOG_NMEA` is `--log_nmea`, then NMEA messages will be logged. The default is blank (no logging). 
+* If `LOG_NMEA` is `--log_nmea`, then NMEA messages will be logged. The default is blank (no logging).
 
 You can provide custom arguments in BlueOS. For example, you can enable logging using [these arguments](custom_args.json):
 ~~~
@@ -48,6 +48,11 @@ Logs can be found in BlueOS:
 * The G2 box still needs a GPS fix to synchronize its clock.
 
 ## Releases
+
+### v1.1.0-beta.2
+
+* Fix a bug where the ListenThread could crash
+* Show G2 logging status in the UI
 
 ### v1.1.0-beta.1
 

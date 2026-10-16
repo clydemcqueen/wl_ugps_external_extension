@@ -12,7 +12,7 @@ EXPOSE 8080/tcp
 # For NMEA messages from the GPS/compass:
 EXPOSE 6200/udp
 
-ARG VERSION="v1.1.0-beta.1"
+ARG VERSION="v1.1.0-beta.2"
 ARG GIT_SHA=""
 
 # For BlueOS extension manager
