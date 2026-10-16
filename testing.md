@@ -74,15 +74,15 @@ Step 3: Build and upload:
 docker buildx build \
   --platform linux/amd64,linux/arm/v7 \
   --build-arg GIT_SHA=$(git rev-parse --short HEAD) \
-  -t YOURDOCKERHUB/wl_ugps_external_extension:latest \
+  -t clydemcqueen/wl_ugps_external_extension:latest \
   --output type=registry \
   .
 ~~~
 
 Step 4: Install on BlueOS
-* Extension identifier: YOURDOCKERHUB.wl_ugps_external_extension
+* Extension identifier: clydemcqueen.wl_ugps_external_extension
 * Extension name: wl_ugps_external_extension
-* Docker image: YOURDOCKERHUB/wl_ugps_external_extension
+* Docker image: clydemcqueen/wl_ugps_external_extension
 * Docker tag: latest
 * Permissions:
 ~~~
